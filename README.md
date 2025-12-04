@@ -4,26 +4,26 @@ A Pulumi component resource for Azure Storage Account with blob container and bl
 
 ## Usage
 
-```typescript
-import { StorageAccount } from "@custom/storage-component";
-import * as pulumi from "@pulumi/pulumi";
+```python
+import pulumi
+from storage_account import StorageAccount
 
-const storageComponent = new StorageAccount("storage", {
-    resourceGroupName: resourceGroup.name,
-    blobSource: new pulumi.asset.FileAsset("./README.md"),
-});
+storage_component = StorageAccount("storage", {
+    'resource_group_name': resource_group.name,
+    'blob_source': pulumi.FileAsset("./README.md"),
+})
 
-export const primaryKey = pulumi.secret(storageComponent.primaryKey);
+pulumi.export('primary_key', pulumi.Output.secret(storage_component.primary_key))
 ```
 
 ## Component Inputs
 
-- `resourceGroupName` - The Azure resource group name
-- `blobSource` - The asset to upload as a blob (FileAsset, StringAsset, etc.)
+- `resource_group_name` - The Azure resource group name
+- `blob_source` - The asset to upload as a blob (FileAsset, StringAsset, etc.)
 
 ## Component Outputs
 
 - `account` - The created StorageAccount resource
 - `container` - The created BlobContainer resource
 - `blob` - The created Blob resource
-- `primaryKey` - The primary storage account key
+- `primary_key` - The primary storage account key
