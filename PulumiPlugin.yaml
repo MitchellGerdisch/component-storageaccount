@@ -1,0 +1,3 @@
+name: storage-component
+runtime: nodejs
+description: A Pulumi component for Azure Storage Account with blob container and blob
