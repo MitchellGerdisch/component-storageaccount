@@ -14,7 +14,7 @@ class StorageAccountArgs(TypedDict):
     blob_source: pulumi.Asset
     """The source asset for the blob (e.g., FileAsset, StringAsset, or RemoteAsset)."""
 
-class StorageAccountComponent(pulumi.ComponentResource):
+class StorageAccount(pulumi.ComponentResource):
     """A component resource for Azure Storage Account with a blob container and blob."""
 
     def __init__(
