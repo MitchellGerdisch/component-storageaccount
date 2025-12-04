@@ -16,14 +16,6 @@ class StorageAccountArgs(TypedDict):
 
 class StorageAccount(ComponentResource):
     """A component resource for Azure Storage Account with a blob container and blob."""
-    account: storage.StorageAccount
-    """The created Azure Storage Account resource."""
-    
-    container: storage.BlobContainer
-    """The created blob container resource."""
-    
-    blob: storage.Blob
-    """The created blob resource."""
     
     primary_key: Output[str]
     """The primary access key for the storage account."""
@@ -34,7 +26,7 @@ class StorageAccount(ComponentResource):
         args: StorageAccountArgs,
         opts: ResourceOptions = None,
     ):
-        super().__init__("custom:index:StorageAccount", name, None, opts)
+        super().__init__("storageaccount:index:StorageAccount", name, None, opts)
 
         # Create an Azure Storage Account
         self.account = storage.StorageAccount(
