@@ -14,16 +14,27 @@ class StorageAccountArgs(TypedDict):
     blob_source: pulumi.Asset
     """The source asset for the blob (e.g., FileAsset, StringAsset, or RemoteAsset)."""
 
-class StorageAccount(pulumi.ComponentResource):
+class StorageAccount(ComponentResource):
     """A component resource for Azure Storage Account with a blob container and blob."""
+    account: storage.StorageAccount
+    """The created Azure Storage Account resource."""
+    
+    container: storage.BlobContainer
+    """The created blob container resource."""
+    
+    blob: storage.Blob
+    """The created blob resource."""
+    
+    primary_key: Output[str]
+    """The primary access key for the storage account."""
 
     def __init__(
         self,
         name: str,
         args: StorageAccountArgs,
-        opts: pulumi.ResourceOptions = None,
+        opts: ResourceOptions = None,
     ):
-        super().__init__("custom:storage:StorageAccountComponent", name, None, opts)
+        super().__init__("custom:index:StorageAccount", name, None, opts)
 
         # Create an Azure Storage Account
         self.account = storage.StorageAccount(
@@ -33,7 +44,7 @@ class StorageAccount(pulumi.ComponentResource):
                 "name": storage.SkuName.STANDARD_LRS,
             },
             kind=storage.Kind.STORAGE_V2,
-            opts=pulumi.ResourceOptions(parent=self),
+            opts=ResourceOptions(parent=self),
         )
 
         # Create a blob container
@@ -41,7 +52,7 @@ class StorageAccount(pulumi.ComponentResource):
             f"{name}-container",
             account_name=self.account.name,
             resource_group_name=args['resource_group_name'],
-            opts=pulumi.ResourceOptions(parent=self),
+            opts=ResourceOptions(parent=self),
         )
 
         # Create a blob in the container
@@ -51,7 +62,7 @@ class StorageAccount(pulumi.ComponentResource):
             container_name=self.container.name,
             resource_group_name=args['resource_group_name'],
             source=args['blob_source'],
-            opts=pulumi.ResourceOptions(parent=self),
+            opts=ResourceOptions(parent=self),
         )
 
         # Export the primary key
