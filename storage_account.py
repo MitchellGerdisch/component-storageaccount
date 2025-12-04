@@ -8,7 +8,7 @@ from pulumi_azure_native import storage
 import pulumi
 
 
-class StorageAccountArgs(TypedDict, total=False):
+class StorageAccountArgs(TypedDict):
     """Arguments for the StorageAccount component."""
     resource_group_name: Input[str]
     """The name of the Azure resource group where resources will be created."""
@@ -82,8 +82,15 @@ class StorageAccount(ComponentResource):
             )
             return keys.keys[0].value
 
-        self.primary_key = Output.all(resource_group_name, self.account.name).apply(get_primary_key)
-
+        self.primary_key = (
+            pulumi.Output.all(resource_group_name, self.account.name)
+            .apply(
+                lambda args: storage.list_storage_account_keys(
+                    resource_group_name=args[0], account_name=args[1]
+                )
+            )
+            .apply(lambda accountKeys: accountKeys.keys[0].value)
+        )
         self.register_outputs({
             'account': self.account,
             'container': self.container,
