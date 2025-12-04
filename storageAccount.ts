@@ -32,7 +32,7 @@ export class StorageAccount extends pulumi.ComponentResource {
             {
                 resourceGroupName: args.resourceGroupName,
                 sku: {
-                    name: storage.SkuName.STANDARD_LRS,
+                    name: storage.SkuName.Standard_LRS,
                 },
                 kind: storage.Kind.StorageV2,
             },
